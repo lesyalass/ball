@@ -1,7 +1,7 @@
 #include "TXLib.h"
 #include <cstdlib>
 #include <cmath>
-//SFML - lib
+
 
 struct Sphere
 {
