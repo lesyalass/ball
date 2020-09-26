@@ -18,26 +18,26 @@ struct Sphere
 
 void drawSphere(Sphere* sphere)
 {
-    for (int i = 0; i < (*sphere).sphereGradient; i++)
+    for (int i = 0; i < sphere->sphereGradient; i++)
     {
-        int sphereX = (*sphere).sphereX + (*sphere).sphereRadius * i / 3 / (*sphere).sphereGradient;
-        int sphereY = (*sphere).sphereY + (*sphere).sphereRadius * i / 2 / (*sphere).sphereGradient;
+        int sphereX = sphere->sphereX + sphere->sphereRadius * i / 3 / sphere->sphereGradient;
+        int sphereY = sphere->sphereY + sphere->sphereRadius * i / 2 / sphere->sphereGradient;
 
-        txSetFillColor(RGB(i * (*sphere).redRate / (*sphere).sphereGradient, i * (*sphere).greenRate / (*sphere).sphereGradient, i * (*sphere).blueRate / (*sphere).sphereGradient));
-        txSetColor(RGB(i * (*sphere).redRate / (*sphere).sphereGradient, i * (*sphere).greenRate /(*sphere).sphereGradient, i * (*sphere).blueRate / (*sphere).sphereGradient));
-        txCircle((*sphere).sphereX, (*sphere).sphereY, (*sphere).sphereRadius - (*sphere).sphereRadius * i / (*sphere).sphereGradient);
+        txSetFillColor(RGB(i * sphere->redRate / sphere->sphereGradient, i * sphere->greenRate / sphere->sphereGradient, i * sphere->blueRate / sphere->sphereGradient));
+        txSetColor    (RGB(i * sphere->redRate / sphere->sphereGradient, i * sphere->greenRate / sphere->sphereGradient, i * sphere->blueRate / sphere->sphereGradient));
+        txCircle(sphere->sphereX, sphere->sphereY, sphere->sphereRadius - sphere->sphereRadius * i / sphere->sphereGradient);
     }
 }
 
 void moveSphere(Sphere *sphere, float dt)
 {
-    (*sphere).sphereX += (*sphere).velocityX * dt;
-    (*sphere).sphereY += (*sphere).velocityY * dt;
+    sphere->sphereX += sphere->velocityX * dt;
+    sphere->sphereY += sphere->velocityY * dt;
 }
 
 bool checkCollisionTwoSpheres(Sphere* sphere1, Sphere* sphere2)
 {
-    if ((*sphere1).sphereRadius + (*sphere2).sphereRadius > sqrt(pow((*sphere1).sphereX - (*sphere2).sphereX, 2)+ pow((*sphere1).sphereY - (*sphere2).sphereY, 2)))
+    if (sphere1->sphereRadius + sphere2->sphereRadius > sqrt(pow(sphere1->sphereX - sphere2->sphereX, 2)+ pow(sphere1->sphereY - sphere2->sphereY, 2)))
     {
         return true;
     }
@@ -46,14 +46,14 @@ bool checkCollisionTwoSpheres(Sphere* sphere1, Sphere* sphere2)
 
 void collisionSphere(Sphere* sphere, int screenSizeX, int screenSizeY)
 {
-    if ((*sphere).sphereX > screenSizeX - (*sphere).sphereRadius || (*sphere).sphereX < (*sphere).sphereRadius)
+    if (sphere->sphereX > screenSizeX - sphere->sphereRadius || sphere->sphereX < sphere->sphereRadius)
         {
-            (*sphere).velocityX = - (*sphere).velocityX;
+            sphere->velocityX = - sphere->velocityX;
         }
 
-    if ((*sphere).sphereY > screenSizeY - (*sphere).sphereRadius || (*sphere).sphereY < (*sphere).sphereRadius)
+    if (sphere->sphereY > screenSizeY - sphere->sphereRadius || sphere->sphereY < sphere->sphereRadius)
         {
-            (*sphere).velocityY = - (*sphere).velocityY;
+            sphere->velocityY = - sphere->velocityY;
         }
 }
 
@@ -68,19 +68,19 @@ float projectionVector( float vectorX, float vectorY, float axisX, float axisY)
 
 void changeVelocitySphere(Sphere* sphere1, Sphere* sphere2)
 {
-    float axisX = (*sphere1).sphereX - (*sphere2).sphereX;
-    float axisY = (*sphere1).sphereY - (*sphere2).sphereY;
+    float axisX = sphere1->sphereX - sphere2->sphereX;
+    float axisY = sphere1->sphereY - sphere2->sphereY;
     float moduleAxis = pow (axisX * axisX + axisY * axisY, 0.5 );
-    float projectionVelocity1 = projectionVector( (*sphere1).velocityX, (*sphere1).velocityY, axisX, axisY);
-    float projectionVelocity2 = projectionVector( (*sphere2).velocityX, (*sphere2).velocityY, axisX, axisY);
+    float projectionVelocity1 = projectionVector( sphere1->velocityX, sphere1->velocityY, axisX, axisY);
+    float projectionVelocity2 = projectionVector( sphere2->velocityX, sphere2->velocityY, axisX, axisY);
     float dv = projectionVelocity1 - projectionVelocity2;
 
     if (dv < 0)
     {
-        (*sphere2).velocityX +=   dv * axisX / moduleAxis;
-        (*sphere2).velocityY +=   dv * axisY / moduleAxis;
-        (*sphere1).velocityX += - dv * axisX / moduleAxis;
-        (*sphere1).velocityY += - dv * axisY / moduleAxis;
+        sphere2->velocityX +=   dv * axisX / moduleAxis;
+        sphere2->velocityY +=   dv * axisY / moduleAxis;
+        sphere1->velocityX += - dv * axisX / moduleAxis;
+        sphere1->velocityY += - dv * axisY / moduleAxis;
     }
 }
 
