@@ -1,43 +1,43 @@
 #include "TXLib.h"
 #include <cstdlib>
 #include <cmath>
-//comment
+
 
 struct Sphere
 {
-    float sphereX;
-    float sphereY;
+    float X;
+    float Y;
     float velocityX;
     float velocityY;
-    int sphereRadius;
+    int Radius;
     int redRate;
     int greenRate;
     int blueRate;
-    int sphereGradient;
+    int Gradient;
 };
 
 void drawSphere(Sphere* sphere)
 {
-    for (int i = 0; i < sphere->sphereGradient; i++)
+    for (int i = 0; i < sphere->Gradient; i++)
     {
-        int sphereX = sphere->sphereX + sphere->sphereRadius * i / 3 / sphere->sphereGradient;
-        int sphereY = sphere->sphereY + sphere->sphereRadius * i / 2 / sphere->sphereGradient;
+        int X = sphere->X + sphere->Radius * i / 3 / sphere->Gradient;
+        int Y = sphere->Y + sphere->Radius * i / 2 / sphere->Gradient;
 
-        txSetFillColor(RGB(i * sphere->redRate / sphere->sphereGradient, i * sphere->greenRate / sphere->sphereGradient, i * sphere->blueRate / sphere->sphereGradient));
-        txSetColor    (RGB(i * sphere->redRate / sphere->sphereGradient, i * sphere->greenRate / sphere->sphereGradient, i * sphere->blueRate / sphere->sphereGradient));
-        txCircle(sphere->sphereX, sphere->sphereY, sphere->sphereRadius - sphere->sphereRadius * i / sphere->sphereGradient);
+        txSetFillColor(RGB(i * sphere->redRate / sphere->Gradient, i * sphere->greenRate / sphere->Gradient, i * sphere->blueRate / sphere->Gradient));
+        txSetColor    (RGB(i * sphere->redRate / sphere->Gradient, i * sphere->greenRate / sphere->Gradient, i * sphere->blueRate / sphere->Gradient));
+        txCircle(sphere->X, sphere->Y, sphere->Radius - sphere->Radius * i / sphere->Gradient);
     }
 }
 
 void moveSphere(Sphere *sphere, float dt)
 {
-    sphere->sphereX += sphere->velocityX * dt;
-    sphere->sphereY += sphere->velocityY * dt;
+    sphere->X += sphere->velocityX * dt;
+    sphere->Y += sphere->velocityY * dt;
 }
 
 bool checkCollisionTwoSpheres(Sphere* sphere1, Sphere* sphere2)
 {
-    if (sphere1->sphereRadius + sphere2->sphereRadius > sqrt(pow(sphere1->sphereX - sphere2->sphereX, 2)+ pow(sphere1->sphereY - sphere2->sphereY, 2)))
+    if (sphere1->Radius + sphere2->Radius > sqrt(pow(sphere1->X - sphere2->X, 2)+ pow(sphere1->Y - sphere2->Y, 2)))
     {
         return true;
     }
@@ -46,12 +46,12 @@ bool checkCollisionTwoSpheres(Sphere* sphere1, Sphere* sphere2)
 
 void collisionSphere(Sphere* sphere, int screenSizeX, int screenSizeY)
 {
-    if (sphere->sphereX > screenSizeX - sphere->sphereRadius || sphere->sphereX < sphere->sphereRadius)
+    if (sphere->X > screenSizeX - sphere->Radius || sphere->X < sphere->Radius)
         {
             sphere->velocityX = - sphere->velocityX;
         }
 
-    if (sphere->sphereY > screenSizeY - sphere->sphereRadius || sphere->sphereY < sphere->sphereRadius)
+    if (sphere->Y > screenSizeY - sphere->Radius || sphere->Y < sphere->Radius)
         {
             sphere->velocityY = - sphere->velocityY;
         }
@@ -68,8 +68,8 @@ float projectionVector( float vectorX, float vectorY, float axisX, float axisY)
 
 void changeVelocitySphere(Sphere* sphere1, Sphere* sphere2)
 {
-    float axisX = sphere1->sphereX - sphere2->sphereX;
-    float axisY = sphere1->sphereY - sphere2->sphereY;
+    float axisX = sphere1->X - sphere2->X;
+    float axisY = sphere1->Y - sphere2->Y;
     float moduleAxis = pow (axisX * axisX + axisY * axisY, 0.5 );
     float projectionVelocity1 = projectionVector( sphere1->velocityX, sphere1->velocityY, axisX, axisY);
     float projectionVelocity2 = projectionVector( sphere2->velocityX, sphere2->velocityY, axisX, axisY);
@@ -112,8 +112,8 @@ int main()
 
         if (txMouseButtons() > 0 )
         {
-            sphere1.sphereX = mouseX;
-            sphere1.sphereY = mouseY;
+            sphere1.X = mouseX;
+            sphere1.Y = mouseY;
             sphere1.velocityX = (mouseX - mouseOldX)/dt;
             sphere1.velocityY = (mouseY - mouseOldY)/dt;
         }
